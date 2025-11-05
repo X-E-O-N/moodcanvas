@@ -15,9 +15,11 @@ Canvas CreateCanvas(int width, int height) {
 
 void BeginCanvasDraw(Canvas *c) {
     BeginTextureMode(c->texture);
+    BeginBlendMode(BLEND_ALPHA);
 }
 
 void EndCanvasDraw(void) {
+    EndBlendMode();
     EndTextureMode();
 }
 
