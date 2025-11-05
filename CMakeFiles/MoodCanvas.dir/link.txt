@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/MoodCanvas.dir/src/canvas.c.o CMakeFiles/MoodCanvas.dir/src/main.c.o CMakeFiles/MoodCanvas.dir/src/mood.c.o CMakeFiles/MoodCanvas.dir/src/ui.c.o -o build/MoodCanvas  /usr/local/lib/libraylib.a -lm -lpthread -ldl -lrt -lGL -lX11 

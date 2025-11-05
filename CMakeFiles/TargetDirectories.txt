@@ -1,0 +1,3 @@
+/home/xeon/repos/moodcanvas/CMakeFiles/MoodCanvas.dir
+/home/xeon/repos/moodcanvas/CMakeFiles/edit_cache.dir
+/home/xeon/repos/moodcanvas/CMakeFiles/rebuild_cache.dir

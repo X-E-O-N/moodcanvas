@@ -1,0 +1,31 @@
+#include "canvas.h"
+
+Canvas CreateCanvas(int width, int height) {
+    Canvas c;
+    c.texture = LoadRenderTexture(width, height);
+    c.width = width;
+    c.height = height;
+
+    BeginTextureMode(c.texture);
+    ClearBackground(RAYWHITE);
+    EndTextureMode();
+
+    return c;
+}
+
+void BeginCanvasDraw(Canvas *c) {
+    BeginTextureMode(c->texture);
+}
+
+void EndCanvasDraw(void) {
+    EndTextureMode();
+}
+
+void DrawCanvas(Canvas *c) {
+    DrawTextureRec(
+        c->texture.texture,
+        (Rectangle){0, 0, c->width, -c->height},
+        (Vector2){0, 0},
+        WHITE
+    );
+}
