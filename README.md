@@ -16,8 +16,6 @@ MoodCanvas aims to explore how digital tools can influence creativity and emotio
 ### Build Steps
 
 ```bash
-mkdir build
-cd build
-cmake ..
+cmake .
 cmake --build .
 ./build/MoodCanvas
