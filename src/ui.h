@@ -2,7 +2,8 @@
 #define UI_H
 
 #include "raylib.h"
+#include "mood.h"
 
-void DrawMoodButtons(void);
+void DrawMoodButtons(Mood currentMood, Mood *clickedMood);
 
 #endif

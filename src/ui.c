@@ -1,18 +1,33 @@
 #include <raylib.h>
 #include "ui.h"
 
-void DrawMoodButtons(void) {
+void DrawMoodButtons(Mood currentMood, Mood *clickedMood) {
+
+    Rectangle btns[MOOD_COUNT] = {
+        {10, 10, 100, 30},
+        {120, 10, 100, 30},
+        {230, 10, 100, 30},
+        {340, 10, 100, 30}
+    };
+
+    const char *labels[MOOD_COUNT] = {"Calm", "Happy", "Angry", "Sad"};
+
     DrawRectangle(0, 0, GetScreenWidth(), 50, (Color){230, 230, 230, 255});
 
-    DrawRectangle(10, 10, 100, 30, LIGHTGRAY);
-    DrawText("Calm", 35, 17, 12, BLACK);
+    Vector2 mouse = GetMousePosition();
 
-    DrawRectangle(120, 10, 100, 30, LIGHTGRAY);
-    DrawText("Happy", 140, 17, 12, BLACK);
+    for (int i = 0; i < MOOD_COUNT; i++) {
+        Color btnColor = LIGHTGRAY;
 
-    DrawRectangle(230, 10, 100, 30, LIGHTGRAY);
-    DrawText("Angry", 255, 17, 12, BLACK);
+        if (CheckCollisionPointRec(mouse, btns[i])) {
+            btnColor = GRAY;
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) *clickedMood = i;
+        }
 
-    DrawRectangle(340, 10, 100, 30, LIGHTGRAY);
-    DrawText("Sad", 370, 17, 12, BLACK);
+        if(currentMood == i) btnColor = DARKGRAY;
+
+        DrawRectangleRec(btns[i], btnColor);
+        DrawText(labels[i], btns[i].x + 25, btns[i].y + 10, 12, BLACK);
+    }  
+
 }
