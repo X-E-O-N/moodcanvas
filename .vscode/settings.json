@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "mood.h": "c",
+        "raylib.h": "c"
+    }
+}

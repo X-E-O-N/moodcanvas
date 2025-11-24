@@ -1,8 +1,10 @@
-CMakeFiles/MoodCanvas.dir/src/main.c.o: \
- /home/xeon/repos/moodcanvas/src/main.c /usr/include/stdc-predef.h \
+CMakeFiles/MoodCanvas.dir/src/stroke.c.o: \
+ /home/xeon/repos/moodcanvas/src/stroke.c /usr/include/stdc-predef.h \
+ /home/xeon/repos/moodcanvas/src/stroke.h \
+ /home/xeon/repos/moodcanvas/src/brush.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h \
  /usr/local/include/raylib.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h /usr/include/stdlib.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h /usr/include/stdlib.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -44,17 +46,4 @@ CMakeFiles/MoodCanvas.dir/src/main.c.o: \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
- /usr/include/strings.h /usr/include/dirent.h \
- /usr/include/x86_64-linux-gnu/bits/dirent.h \
- /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
- /usr/include/x86_64-linux-gnu/bits/local_lim.h \
- /usr/include/linux/limits.h \
- /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
- /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
- /usr/include/x86_64-linux-gnu/bits/dirent_ext.h \
- /usr/include/x86_64-linux-gnu/sys/stat.h \
- /usr/include/x86_64-linux-gnu/bits/stat.h \
- /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
- /home/xeon/repos/moodcanvas/src/canvas.h \
- /home/xeon/repos/moodcanvas/src/mood.h \
- /home/xeon/repos/moodcanvas/src/ui.h
+ /usr/include/strings.h
