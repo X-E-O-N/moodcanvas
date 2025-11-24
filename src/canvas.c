@@ -7,7 +7,7 @@ Canvas CreateCanvas(int width, int height) {
     c.height = height;
 
     BeginTextureMode(c.texture);
-    ClearBackground(RAYWHITE);
+    ClearBackground((Color){180, 220, 255, 255});
     EndTextureMode();
 
     return c;

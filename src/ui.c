@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <string.h>
 #include "ui.h"
 #include "mood.h"
 
@@ -53,11 +54,11 @@ void DrawMoodButtons(Mood currentMood, Mood *clickedMood, Color *selectedColor, 
 
     // size buttons
 
-    DrawText("Size", 520, 10, 12, BLACK);
+    DrawText("Size", 520, 20, 12, BLACK);
     Rectangle sizeBtns[3] = {
-        {560, 5, 40, 20},
-        {605, 5, 40, 20},
-        {650, 5, 40, 20},
+        {560, 15, 40, 20},
+        {605, 15, 40, 20},
+        {650, 15, 40, 20},
     };
     const char *sizeLabels[3] = {"S", "M", "L"};
 
@@ -76,18 +77,18 @@ void DrawMoodButtons(Mood currentMood, Mood *clickedMood, Color *selectedColor, 
 
     // opacity buttons
 
-    DrawText("Opacity:", 500, 35, 12, BLACK);
+    DrawText("Opacity:", 500, 55, 12, BLACK);
     Rectangle opBtns[3] = {
-        {560, 30, 40, 20},
-        {605, 30, 40, 20},
-        {650, 30, 40, 20}
+        {560, 50, 40, 20},
+        {605, 50, 40, 20},
+        {650, 50, 40, 20}
     };
     const char *opLabels[3] = {"20%", "60%", "100%"};
 
     for (int i = 0; i < 3; i++) {
         Color c = (uiState->opacityLevel == i) ? DARKGRAY : LIGHTGRAY;
         DrawRectangleRec(opBtns[i], c);
-        DrawText(opLabels[i], opBtns[i].x + 3, opBtns[i].y + 4, 10, BLACK);
+        DrawText(opLabels[i], opBtns[i].x + 8, opBtns[i].y + 4, 10, BLACK);
 
         if (CheckCollisionPointRec(mouse, opBtns[i]) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             uiState->opacityLevel = i;
@@ -101,7 +102,7 @@ void DrawMoodButtons(Mood currentMood, Mood *clickedMood, Color *selectedColor, 
 
     Rectangle eraserBtn = {710, 10, 80, 30};
     DrawRectangleRec(eraserBtn, uiState->eraser? DARKGRAY : LIGHTGRAY);
-    DrawText("Eraser", 730, 17, 12, BLACK);
+    DrawText("Eraser", eraserBtn.x + 20, eraserBtn.y + 8, 12, BLACK);
 
     if (CheckCollisionPointRec(mouse, eraserBtn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         uiState->eraser = !uiState->eraser;
@@ -109,12 +110,30 @@ void DrawMoodButtons(Mood currentMood, Mood *clickedMood, Color *selectedColor, 
 
     // clear button
 
-    Rectangle clearBtn = {800, 10, 80, 30};
+    Rectangle clearBtn = {710, 45, 80, 30};
     DrawRectangleRec(clearBtn, LIGHTGRAY);
-    DrawText("Clear", 825, 17, 12, BLACK);
+    DrawText("Clear", clearBtn.x + 20, clearBtn.y + 8, 12, BLACK);
 
     if (CheckCollisionPointRec(mouse, clearBtn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         uiState->requestClear = true;
+    }
+
+    // save button
+
+    Rectangle saveBtn = {930, 10, 80, 30};
+    DrawRectangleRec(saveBtn, LIGHTGRAY);
+    DrawText("Save", saveBtn.x + 20, saveBtn.y + 8, 12, BLACK);
+    if (CheckCollisionPointRec(mouse, saveBtn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        uiState->dialog = UI_SAVE_DIALOG;
+        strcpy(uiState->fileNameInput, "");
+        uiState->typingPosition = 0;
+    }
+
+    Rectangle loadBtn = {930, 45, 80, 30};
+    DrawRectangleRec(loadBtn, LIGHTGRAY);
+    DrawText("Load", loadBtn.x + 20, loadBtn.y + 8, 12, BLACK);
+    if (CheckCollisionPointRec(mouse, loadBtn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        uiState->dialog = UI_LOAD_DIALOG;
     }
 
 
