@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <dirent.h>
 #include <sys/stat.h>
@@ -15,9 +16,6 @@
 char statusText[64];
 int statusTimer = 0;
 Canvas canvas;
-// Color currentBG;
-// Color targetBG;
-// float moodTransition = 1.0f;
 Color selectedColor;
 int brushSize;
 float brushOpacity;
@@ -25,6 +23,49 @@ bool eraserMode = false;
 Vector2 lp = {0, 0};
 UIState uiState;
 
+// save image function
+
+void SaveCanvas(const char *filename) {
+    char full[64];
+    snprintf(full, 64, "exports/%s.png", filename);
+
+    Image img = LoadImageFromTexture(canvas.texture.texture);
+    ImageFlipVertical(&img);
+    ExportImage(img, full);
+    UnloadImage(img);
+
+    strcpy(statusText, "Saved!");
+    statusTimer = 120;
+}
+
+// load image function
+
+void LoadCanvas(const char *filename) {
+    char full[64];
+    if (strstr(filename, ".png") != NULL) {
+        snprintf(full, sizeof(full), "exports/%s", filename);
+    } else {
+        snprintf(full, sizeof(full), "exports/%s.png", filename);
+    }
+
+    Image img = LoadImage(full);
+    if (!img.data) {
+        strcpy(statusText, "Load failed.");
+        statusTimer = 120;
+        return;
+    }
+
+    ImageFlipVertical(&img);
+    if (img.format != PIXELFORMAT_UNCOMPRESSED_R8G8B8A8) {
+        ImageFormat(&img, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
+    }
+    UpdateTexture(canvas.texture.texture, img.data);
+
+    UnloadImage(img);
+
+    strcpy(statusText, "Loaded!");
+    statusTimer = 120;
+}
 
 int main(void){
 
@@ -74,6 +115,8 @@ int main(void){
             uiState.eraser = false;
             uiState.requestClear = false;
 
+            // quantize brush properties to levels dictated by the ui
+
             if (uiState.brushSize <= 5) uiState.sizeLevel = 0;
             else if (uiState.brushSize <= 12) uiState.sizeLevel = 1;
             else uiState.sizeLevel = 2;
@@ -84,23 +127,6 @@ int main(void){
 
 
             moodProfile = newProfile;
-
-            // background transition on mood change
-
-            // currentBG = moodProfile.backgroundColor;
-            // targetBG = newProfile.backgroundColor;
-            // moodTransition = 0.0f;
-
-            // if (moodTransition < 1.0f) {
-            //     moodTransition += 0.04f;
-
-            //     Color blended = {
-            //         (unsigned char)Lerp(currentBG.r, targetBG.r, moodTransition),
-            //         (unsigned char)Lerp(currentBG.g, targetBG.g, moodTransition),
-            //         (unsigned char)Lerp(currentBG.b, targetBG.b, moodTransition),
-            //         255
-            //     };
-            // }
 
             // draw canvas bg
 
@@ -137,18 +163,6 @@ int main(void){
             lp = mp;
         } 
 
-        // save as png
-
-        if (IsKeyPressed(KEY_S)) {
-            Image img = LoadImageFromTexture(canvas.texture.texture);
-            ImageFlipVertical(&img);
-            ExportImage(img, "untitled.png");
-            UnloadImage(img);
-
-            strcpy(statusText, "Saved as untitled.png");
-            statusTimer = 120;
-        }
-
         // draw canvas and ui elements
 
         BeginDrawing();
@@ -178,6 +192,77 @@ int main(void){
         if (statusTimer > 0) {
             DrawText(statusText, 20, screenHeight - 40, 20, BLACK);
             statusTimer--;
+        }
+
+                // save dialog logic
+
+        if (uiState.dialog == UI_SAVE_DIALOG) {
+            DrawRectangle(200, 200, 400, 200, (Color){200,200,200,240});
+            DrawText("Enter name:", 230, 220, 20, BLACK);
+
+            DrawRectangle(230, 250, 350, 30, WHITE);
+            DrawText(uiState.fileNameInput, 235, 255, 20, BLACK);
+
+            Rectangle saveBtn = {280, 300, 100, 30};
+            DrawRectangleRec(saveBtn, LIGHTGRAY);
+            DrawText("Save", saveBtn.x + 32, saveBtn.y + 8, 12, BLACK);
+
+            Rectangle cancelBtn = {420, 300, 100, 30};
+            DrawRectangleRec(cancelBtn, LIGHTGRAY);
+            DrawText("Cancel", cancelBtn.x + 25, cancelBtn.y + 8, 12, BLACK);
+
+            int key = GetCharPressed();
+            if (key >= 32 && key < 125 && uiState.typingPosition < 31) {
+                uiState.fileNameInput[uiState.typingPosition++] = (char) key;
+                uiState.fileNameInput[uiState.typingPosition] = '\0';
+            }
+            if (IsKeyPressed(KEY_BACKSPACE) && uiState.typingPosition > 0) {
+                uiState.fileNameInput[--uiState.typingPosition] = '\0';
+            }
+            if (CheckCollisionPointRec(mp, saveBtn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                if (strlen(uiState.fileNameInput) > 0) {
+                    SaveCanvas(uiState.fileNameInput);
+                }
+                uiState.dialog = UI_NONE;
+            }
+            if (CheckCollisionPointRec(mp, cancelBtn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                uiState.dialog = UI_NONE;
+            }
+        }
+
+        // load dialog logic
+
+        if (uiState.dialog == UI_LOAD_DIALOG) {
+            DrawRectangle(150, 150, 500, 350, (Color){200,200,200,240});
+            DrawText("Choose Image:", 180, 160, 20, BLACK);
+
+            DIR *d = opendir("exports");
+            struct dirent *dir;
+            int yOffset = 200;
+
+            if (d) {
+                while ((dir = readdir(d)) != NULL) {
+                    if (strstr(dir->d_name, ".png")) {
+                        Rectangle fileBtn = {180, yOffset - 2, 300, 22};
+                        DrawRectangleRec(fileBtn, LIGHTGRAY);
+                        DrawText(dir->d_name, 180, yOffset, 18, BLACK);
+
+                        if (CheckCollisionPointRec(mp, fileBtn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                            LoadCanvas(dir->d_name);
+                            uiState.dialog = UI_NONE;
+                        }
+                        yOffset += 30;
+                    }
+                }
+                closedir(d);
+            }
+            Rectangle cancelBtn = {420, 300, 100, 30};
+            DrawRectangleRec(cancelBtn, LIGHTGRAY);
+            DrawText("Cancel", cancelBtn.x + 25, cancelBtn.y + 8, 12, BLACK);
+
+            if (CheckCollisionPointRec(mp, cancelBtn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                uiState.dialog = UI_NONE;
+            }
         }
 
         EndDrawing();
