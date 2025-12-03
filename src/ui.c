@@ -41,7 +41,7 @@ void DrawMoodButtons(Mood currentMood, Mood *clickedMood, Color *selectedColor, 
     // color swatches
 
     Rectangle swatches[9];
-    Color palette[9] = {WHITE, LIGHTGRAY, GRAY, DARKGRAY, BLACK, RED, BLUE, GREEN};
+    Color palette[9] = {WHITE, LIGHTGRAY, GRAY, DARKGRAY, BLACK, RED, BLUE, YELLOW};
 
     for (int i = 0; i < 9; i++) {
         swatches[i] = (Rectangle){10 + i*40, 50, 30, 30};

@@ -194,7 +194,7 @@ int main(void){
             statusTimer--;
         }
 
-                // save dialog logic
+        // save dialog logic
 
         if (uiState.dialog == UI_SAVE_DIALOG) {
             DrawRectangle(200, 200, 400, 200, (Color){200,200,200,240});

@@ -15,6 +15,36 @@ MoodCanvas aims to explore how digital tools can influence creativity and emotio
 
 ### Build Steps
 
+#### Prerequisites for Windows:
+- MinGW-w64 (https://www.mingw-w64.org/)
+- CMake (https://cmake.org/download/)
+- raylib (https://github.com/raysan5/raylib/releases)
+
+#### CMakeLists.txt Content:
+cmake_minimum_required(VERSION 3.10)
+project(MoodCanvas C)
+
+set(CMAKE_C_STANDARD 99)
+
+set(RAYLIB_DIR "C:/libs/raylib")  # Change this to raylib directory
+
+include_directories(${RAYLIB_DIR}/include)
+link_directories(${RAYLIB_DIR}/lib)
+
+file(GLOB SRC_FILES "src/*.c")
+
+add_executable(MoodCanvas ${SRC_FILES})
+
+target_link_libraries(MoodCanvas raylib opengl32 gdi32 winmm)
+
+#### Build Commands
+mkdir build
+cd build
+cmake ..
+cmake --build . --config Release
+
+./Release/MoodCanvas.exe # Run
+
 ```bash
 cmake .
 cmake --build .
